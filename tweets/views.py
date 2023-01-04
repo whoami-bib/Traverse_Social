@@ -139,7 +139,7 @@ class commentView(APIView):
             result_page, many=True, context={'request': request})
         # return Response(serializer.data)
         return paginator.get_paginated_response(serializer.data)
-
+    
     def post(self,request,pk):
         data = request.data
         tweet = self.get_object(pk)
@@ -182,12 +182,12 @@ def like_unlike_comment(request):
     if request.method == "POST":
         pk = request.data.get("pk")
         comment = get_object_or_404(Comment, id=pk)
-        if request.user in comment.liked.all():
+        if request.user in comment.likes.all():
             liked = False
-            comment.liked.remove(request.user)
+            comment.likes.remove(request.user)
         else:
             liked = True
-            comment.liked.add(request.user)
+            comment.likes.add(request.user)
         return Response({
             'liked': liked,
             'count': comment.like_comment
